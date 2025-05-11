@@ -1,135 +1,168 @@
-# Getting Started with Create React App
+# E-Commerce Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, full-stack e-commerce application built with React, Firebase, and containerized with Docker for easy deployment with Kubernetes.
 
-## Available Scripts
+![E-Commerce Platform](https://via.placeholder.com/800x400?text=E-Commerce+Platform)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **User Authentication**: Secure login, registration, and profile management
+- **Product Management**: Browse, search, and filter products by categories
+- **Shopping Cart**: Add, remove, and update quantities of products
+- **Checkout Process**: Streamlined checkout with shipping and payment options
+- **Admin Dashboard**: Complete product, category, and order management
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend**: 
+  - React.js (v19)
+  - React Router v7
+  - Tailwind CSS
+  - Material UI components
 
-### `npm test`
+- **Backend/Database**: 
+  - Firebase Authentication
+  - Firestore Database
+  - Firebase Storage (for product images)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **DevOps**:
+  - Docker for containerization
+  - Kubernetes for orchestration
+  - GitHub Actions for CI/CD
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-# ShopEase E-commerce Platform
-
-## GitHub Pages Deployment Guide
-
-If you're deploying this app to GitHub Pages, follow these steps to ensure proper routing:
-
-### Automatic Deployment
-
-1. Run the deployment script:
-   - On Windows: `.\deploy-gh-pages.bat`
-   - On macOS/Linux: `bash deploy-gh-pages.sh`
-
-2. Wait for the deployment to complete. Your site will be available at https://safi1000.github.io/e-commerce/
-
-### Manual Deployment
-
-1. Build the project:
-   ```
-   npm run build
-   ```
-
-2. Copy the 404.html file to the build directory:
-   ```
-   cp public/404.html build/
-   ```
-
-3. Add a .nojekyll file to bypass GitHub Pages processing:
-   ```
-   touch build/.nojekyll
-   ```
-
-4. Deploy using gh-pages:
-   ```
-   npm run deploy
-   ```
-
-### Fixing Routing Issues
-
-If you encounter the "There isn't a GitHub Pages site here" error when navigating to different pages or after refreshing, the issue is due to GitHub Pages not handling client-side routing correctly. This happens because:
-
-1. GitHub Pages serves a 404 page when it can't find a file that matches the requested URL
-2. React Router is a client-side routing solution, so GitHub Pages doesn't know how to handle routes like `/shop` or `/product/123`
-
-Our solution uses these techniques:
-
-1. A custom `404.html` page that redirects to the main page with the requested path in the URL
-2. A script in `index.html` that reads this path and passes it to React Router
-3. Using HashRouter instead of BrowserRouter (which uses the `#` symbol in URLs)
-
-If you still encounter issues:
-- Make sure your browser isn't blocking the redirect scripts
-- Try clearing your browser cache
-- Verify that your repository settings are correctly set up for GitHub Pages deployment
-
-### Testing Locally
-
-To test the GitHub Pages build locally, you can use a simple HTTP server:
+## Project Structure
 
 ```
-npm install -g serve
-serve -s build
+/
+├── app/                          # Main application code
+│   ├── client/                   # Frontend React application
+│   │   ├── src/
+│   │   │   ├── components/       # Reusable UI components
+│   │   │   ├── contexts/         # React context providers
+│   │   │   ├── firebase/         # Firebase configuration and utilities
+│   │   │   ├── pages/            # Application pages
+│   │   │   │   ├── admin/        # Admin dashboard pages
+│   │   │   │   ├── auth/         # Authentication pages
+│   │   │   │   ├── shop/         # Shop pages
+│   │   │   │   └── user/         # User profile pages
+│   │   │   └── utils/            # Helper functions
+│   │   ├── public/               # Static assets
+│   │   ├── Dockerfile            # Docker configuration for frontend
+│   │   └── nginx.conf            # Nginx configuration for serving React app
+├── deployment.yaml               # Kubernetes deployment configuration
+├── service.yaml                  # Kubernetes service configuration
+└── .github/                      # GitHub Actions workflows
+    └── workflows/
+        └── deploy.yml            # CI/CD pipeline configuration
 ```
 
-This will serve your built application on `http://localhost:3000`.
+## Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+- Docker and Docker Compose (for containerized development)
+- Kubernetes cluster (for deployment)
+- Firebase account
+
+## Getting Started
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Safi1000/SCDProj.git
+   cd SCDProj
+   ```
+
+2. **Frontend Setup**
+   ```bash
+   cd app/client
+   npm install
+   npm start
+   ```
+   
+   The application will be available at `http://localhost:3000`
+
+### Docker Development
+
+Run the frontend in a Docker container:
+
+```bash
+cd app/client
+docker build -t ecommerce-client .
+docker run -p 3000:80 ecommerce-client
+```
+
+Access the application at `http://localhost:3000`
+
+### Using Pre-built Image
+
+You can also run the application using the pre-built Docker image:
+
+```bash
+docker run -p 3000:80 i222401/ecommerce:latest
+```
+
+## Deployment
+
+### Kubernetes Deployment
+
+1. **Apply the Kubernetes configurations**:
+   ```bash
+   kubectl apply -f deployment.yaml
+   kubectl apply -f service.yaml
+   ```
+
+2. **Access the application**:
+   The application will be available at `http://<node-ip>:30007`
+
+### GitHub Actions CI/CD
+
+The repository includes a GitHub Actions workflow that:
+1. Builds the Docker image
+2. Pushes it to Docker Hub
+3. Deploys to a Kubernetes cluster
+
+## Pushing Code to GitHub
+
+1. **Initialize Git Repository**:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit with app and Dockerfile"
+   ```
+
+2. **Add Remote Repository**:
+   ```bash
+   git remote add origin https://github.com/Safi1000/SCDProj.git
+   git push -u origin main
+   ```
+
+3. **Verify** that your code, including the Dockerfile and Kubernetes files, is visible in the GitHub repository.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **White Screen in Browser**
+   - Check browser console for JavaScript errors
+   - Verify that nginx is correctly serving static files
+   - Ensure the correct base path is set in the React application
+
+2. **Firebase Authentication Issues**
+   - Verify that your Firebase configuration is correct
+   - Check that authentication is enabled in your Firebase project
+
+3. **Docker/Kubernetes Issues**
+   - Ensure Docker is running and has sufficient resources
+   - Check pod logs with `kubectl logs [pod-name]`
+   - Verify that services are correctly configured
+
+## Acknowledgments
+
+- [React](https://reactjs.org/)
+- [Firebase](https://firebase.google.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Docker](https://www.docker.com/)
+- [Kubernetes](https://kubernetes.io/) 

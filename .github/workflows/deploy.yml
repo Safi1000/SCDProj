@@ -1,0 +1,50 @@
+name: Build and Deploy to Minikube
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker to use Minikube's environment
+      run: |
+        echo "Configuring Docker to use Minikube's daemon..."
+        if [ "$(uname)" == "Darwin" ] || [ "$(uname)" == "Linux" ]; then
+          eval $(minikube docker-env)
+        else
+          & minikube -p minikube docker-env | Invoke-Expression
+        fi
+
+    - name: Build Docker image
+      working-directory: ./app/client
+      run: |
+        docker build -t i222401/ecommerce:latest .
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Push Docker image to Docker Hub
+      run: docker push i222401/ecommerce:latest
+
+    - name: Deploy to Minikube
+      run: |
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        
+    - name: Verify deployment
+      run: |
+        echo "Waiting for deployment to be ready..."
+        kubectl rollout status deployment/ecommerce-app
+        echo "Service details:"
+        kubectl get service ecommerce-service
+        
+    - name: Get application URL
+      run: |
+        echo "Application URL:"
+        minikube service ecommerce-service --url 
