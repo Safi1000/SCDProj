@@ -51,21 +51,20 @@ jobs:
         # Check for nginx.conf
         if (-not (Test-Path "${{ github.workspace }}/app/client/nginx.conf")) {
           Write-Host "nginx.conf not found, creating it..."
-          $nginxContent = 'server {
-    listen 80;
-    
-    location / {
-        root /usr/share/nginx/html;
-        index index.html index.htm;
-        try_files $uri $uri/ /index.html;
-    }
-    
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
-        root /usr/share/nginx/html;
-    }
-}'
-          Set-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value $nginxContent
+          Set-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "server {"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    listen 80;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value ""
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    location / {"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        root /usr/share/nginx/html;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        index index.html index.htm;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        try_files "'$'"uri "'$'"uri/ /index.html;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    }"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value ""
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    error_page 500 502 503 504 /50x.html;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    location = /50x.html {"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        root /usr/share/nginx/html;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    }"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "}"
           Write-Host "nginx.conf created successfully"
         } else {
           Write-Host "nginx.conf found!"
