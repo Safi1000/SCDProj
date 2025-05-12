@@ -29,7 +29,7 @@ jobs:
           Get-Content "${{ github.workspace }}/app/client/Dockerfile"
         } else {
           Write-Host "Dockerfile not found, creating it..."
-          $dockerfileContent = @"
+          $dockerfileContent = @'
 FROM node:18-alpine as build
 WORKDIR /app
 COPY package*.json ./
@@ -44,7 +44,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-"@
+'@
           Set-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value $dockerfileContent
           Write-Host "Dockerfile created successfully"
         }
