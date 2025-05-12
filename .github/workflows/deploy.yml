@@ -78,85 +78,76 @@ jobs:
         Get-ChildItem -Path "${{ github.workspace }}/app/client"
         
         # Create a basic package.json file for the build
-        $packageJsonContent = @'
-{
-  "name": "ecommerce-app",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
-}
-'@
-        Set-Content -Path "${{ github.workspace }}/app/client/package.json" -Value $packageJsonContent
+        Write-Host "Creating package.json file..."
+        Set-Content -Path "${{ github.workspace }}/app/client/package.json" -Value "{" 
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "name": "ecommerce-app",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "version": "1.0.0",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "private": true,'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "dependencies": {'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "react": "^18.2.0",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "react-dom": "^18.2.0",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "react-scripts": "5.0.1"'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  },'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "scripts": {'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "start": "react-scripts start",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "build": "react-scripts build",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "test": "react-scripts test",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "eject": "react-scripts eject"'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  },'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  "browserslist": ['
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    ">0.2%",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "not dead",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "not ie <= 11",'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '    "not op_mini all"'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '  ]'
+        Add-Content -Path "${{ github.workspace }}/app/client/package.json" -Value '}'
         
         # Create a basic index.html file for the build
-        $indexHtmlContent = @'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>E-Commerce App</title>
-</head>
-<body>
-  <div id="root">
-    <h1>E-Commerce App</h1>
-    <p>Welcome to our online store!</p>
-  </div>
-</body>
-</html>
-'@
+        Write-Host "Creating index.html file..."
         New-Item -Path "${{ github.workspace }}/app/client/public" -ItemType Directory -Force
-        Set-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value $indexHtmlContent
+        Set-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '<!DOCTYPE html>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '<html lang="en">'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '<head>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '  <meta charset="utf-8" />'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '  <meta name="viewport" content="width=device-width, initial-scale=1" />'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '  <title>E-Commerce App</title>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '</head>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '<body>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '  <div id="root">'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '    <h1>E-Commerce App</h1>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '    <p>Welcome to our online store!</p>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '  </div>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '</body>'
+        Add-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value '</html>'
         
         # Create a basic React app structure
+        Write-Host "Creating React app files..."
         New-Item -Path "${{ github.workspace }}/app/client/src" -ItemType Directory -Force
-        $indexJsContent = @'
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-'@
-        Set-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value $indexJsContent
+        Set-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value 'import React from "react";'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value 'import ReactDOM from "react-dom/client";'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value 'import App from "./App";'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value ''
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value 'const root = ReactDOM.createRoot(document.getElementById("root"));'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value 'root.render('
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value '  <React.StrictMode>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value '    <App />'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value '  </React.StrictMode>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value ');'
         
-        $appJsContent = @'
-import React from "react";
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>E-Commerce App</h1>
-        <p>Welcome to our online store!</p>
-      </header>
-    </div>
-  );
-}
-
-export default App;
-'@
-        Set-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value $appJsContent
+        Set-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value 'import React from "react";'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value ''
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value 'function App() {'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '  return ('
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '    <div className="App">'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '      <header className="App-header">'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '        <h1>E-Commerce App</h1>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '        <p>Welcome to our online store!</p>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '      </header>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '    </div>'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '  );'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value '}'
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value ''
+        Add-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value 'export default App;'
         
         Set-Location -Path "${{ github.workspace }}/app/client"
         Write-Host "Building Docker image from $(Get-Location)"
