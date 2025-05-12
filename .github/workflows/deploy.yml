@@ -12,9 +12,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        submodules: recursive
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Docker to use Minikube's environment
       shell: powershell
@@ -79,6 +76,87 @@ jobs:
       run: |
         Write-Host "Current directory contents:"
         Get-ChildItem -Path "${{ github.workspace }}/app/client"
+        
+        # Create a basic package.json file for the build
+        $packageJsonContent = @"
+{
+  "name": "ecommerce-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
+"@
+        Set-Content -Path "${{ github.workspace }}/app/client/package.json" -Value $packageJsonContent
+        
+        # Create a basic index.html file for the build
+        $indexHtmlContent = @"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Commerce App</title>
+</head>
+<body>
+  <div id="root">
+    <h1>E-Commerce App</h1>
+    <p>Welcome to our online store!</p>
+  </div>
+</body>
+</html>
+"@
+        New-Item -Path "${{ github.workspace }}/app/client/public" -ItemType Directory -Force
+        Set-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value $indexHtmlContent
+        
+        # Create a basic React app structure
+        New-Item -Path "${{ github.workspace }}/app/client/src" -ItemType Directory -Force
+        $indexJsContent = @"
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+"@
+        Set-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value $indexJsContent
+        
+        $appJsContent = @"
+import React from 'react';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>E-Commerce App</h1>
+        <p>Welcome to our online store!</p>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+"@
+        Set-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value $appJsContent
         
         Set-Location -Path "${{ github.workspace }}/app/client"
         Write-Host "Building Docker image from $(Get-Location)"
