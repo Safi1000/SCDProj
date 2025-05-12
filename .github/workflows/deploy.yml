@@ -206,5 +206,8 @@ jobs:
     - name: Get application URL
       shell: powershell
       run: |
-        Write-Host "Application URL:"
-        minikube service ecommerce-service --url
+        Write-Host "Application URL information:"
+        $nodePort = kubectl get service ecommerce-service -o jsonpath="{.spec.ports[0].nodePort}"
+        $minikubeIP = minikube ip
+        Write-Host "Service is available at: http://${minikubeIP}:${nodePort}"
+        Write-Host "Deployment complete!"
