@@ -78,7 +78,7 @@ jobs:
         Get-ChildItem -Path "${{ github.workspace }}/app/client"
         
         # Create a basic package.json file for the build
-        $packageJsonContent = @"
+        $packageJsonContent = @'
 {
   "name": "ecommerce-app",
   "version": "1.0.0",
@@ -101,11 +101,11 @@ jobs:
     "not op_mini all"
   ]
 }
-"@
+'@
         Set-Content -Path "${{ github.workspace }}/app/client/package.json" -Value $packageJsonContent
         
         # Create a basic index.html file for the build
-        $indexHtmlContent = @"
+        $indexHtmlContent = @'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,28 +120,28 @@ jobs:
   </div>
 </body>
 </html>
-"@
+'@
         New-Item -Path "${{ github.workspace }}/app/client/public" -ItemType Directory -Force
         Set-Content -Path "${{ github.workspace }}/app/client/public/index.html" -Value $indexHtmlContent
         
         # Create a basic React app structure
         New-Item -Path "${{ github.workspace }}/app/client/src" -ItemType Directory -Force
-        $indexJsContent = @"
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+        $indexJsContent = @'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
-"@
+'@
         Set-Content -Path "${{ github.workspace }}/app/client/src/index.js" -Value $indexJsContent
         
-        $appJsContent = @"
-import React from 'react';
+        $appJsContent = @'
+import React from "react";
 
 function App() {
   return (
@@ -155,7 +155,7 @@ function App() {
 }
 
 export default App;
-"@
+'@
         Set-Content -Path "${{ github.workspace }}/app/client/src/App.js" -Value $appJsContent
         
         Set-Location -Path "${{ github.workspace }}/app/client"
