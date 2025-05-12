@@ -24,29 +24,26 @@ jobs:
       run: |
         Write-Host "Checking for Dockerfile in app/client directory..."
         Get-ChildItem -Path "${{ github.workspace }}/app/client" -Force
-        if (Test-Path "${{ github.workspace }}/app/client/Dockerfile") {
+        if (-not (Test-Path "${{ github.workspace }}/app/client/Dockerfile")) {
+          Write-Host "Dockerfile not found, creating it..."
+          Set-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "FROM node:18-alpine as build"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "WORKDIR /app"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "COPY package*.json ./"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "RUN npm install --legacy-peer-deps"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "COPY . ."
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "ENV PUBLIC_URL="
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "RUN npm run build"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "RUN ls -la /app/build"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "FROM nginx:alpine"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "COPY --from=build /app/build /usr/share/nginx/html"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "RUN rm /etc/nginx/conf.d/default.conf"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "COPY nginx.conf /etc/nginx/conf.d/default.conf"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "EXPOSE 80"
+          Add-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value 'CMD ["nginx", "-g", "daemon off;"]'
+          Write-Host "Dockerfile created successfully"
+        } else {
           Write-Host "Dockerfile found!"
           Get-Content "${{ github.workspace }}/app/client/Dockerfile"
-        } else {
-          Write-Host "Dockerfile not found, creating it..."
-          $dockerfileContent = @'
-FROM node:18-alpine as build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-COPY . .
-ENV PUBLIC_URL=
-RUN npm run build
-RUN ls -la /app/build
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-'@
-          Set-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value $dockerfileContent
-          Write-Host "Dockerfile created successfully"
         }
 
     - name: Build Docker image
