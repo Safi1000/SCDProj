@@ -19,11 +19,13 @@ jobs:
         Write-Host "Configuring Docker to use Minikube's daemon..."
         & minikube -p minikube docker-env | Invoke-Expression
 
-    - name: Check for Dockerfile
+    - name: Check for required files
       shell: powershell
       run: |
-        Write-Host "Checking for Dockerfile in app/client directory..."
+        Write-Host "Checking for required files in app/client directory..."
         Get-ChildItem -Path "${{ github.workspace }}/app/client" -Force
+        
+        # Check for Dockerfile
         if (-not (Test-Path "${{ github.workspace }}/app/client/Dockerfile")) {
           Write-Host "Dockerfile not found, creating it..."
           Set-Content -Path "${{ github.workspace }}/app/client/Dockerfile" -Value "FROM node:18-alpine as build"
@@ -45,11 +47,41 @@ jobs:
           Write-Host "Dockerfile found!"
           Get-Content "${{ github.workspace }}/app/client/Dockerfile"
         }
+        
+        # Check for nginx.conf
+        if (-not (Test-Path "${{ github.workspace }}/app/client/nginx.conf")) {
+          Write-Host "nginx.conf not found, creating it..."
+          $nginxContent = @'
+server {
+    listen 80;
+    
+    location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html;
+    }
+    
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}
+'@
+          Set-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value $nginxContent
+          Write-Host "nginx.conf created successfully"
+        } else {
+          Write-Host "nginx.conf found!"
+          Get-Content "${{ github.workspace }}/app/client/nginx.conf"
+        }
 
     - name: Build Docker image
       shell: powershell
       run: |
+        Write-Host "Current directory contents:"
+        Get-ChildItem -Path "${{ github.workspace }}/app/client"
+        
         Set-Location -Path "${{ github.workspace }}/app/client"
+        Write-Host "Building Docker image from $(Get-Location)"
         docker build -t i222401/ecommerce:latest .
 
     - name: Login to Docker Hub
