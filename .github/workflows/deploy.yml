@@ -57,7 +57,7 @@ jobs:
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    location / {"
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        root /usr/share/nginx/html;"
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        index index.html index.htm;"
-          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "        try_files "'$'"uri "'$'"uri/ /index.html;"
+          Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value '        try_files $uri $uri/ /index.html;'
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    }"
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value ""
           Add-Content -Path "${{ github.workspace }}/app/client/nginx.conf" -Value "    error_page 500 502 503 504 /50x.html;"
